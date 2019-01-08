@@ -9,6 +9,11 @@ function my_git_prompt() {
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 
+  # is branch behind?
+  if $(echo "$(git log HEAD..origin/$(git_current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
+    STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+  fi
+
   # is anything staged?
   if $(echo "$INDEX" | command grep -E -e '^(D[ M]|[MARC][ MD]) ' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED"
@@ -58,6 +63,7 @@ PROMPT=$'\n%{$soft%}[%T] %{$reset_color%}$(ssh_connection)%{$orangish%}%n%{$redd
 ZSH_THEME_PROMPT_RETURNCODE_PREFIX="%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_PREFIX=" $fg[white]‹ %{$orange%}"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg_bold[magenta]%}↑"
+ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg_bold[green]%}↓"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg_bold[green]%}●"
 ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg_bold[red]%}●"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[white]%}●"
